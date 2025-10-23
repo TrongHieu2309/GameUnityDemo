@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 
 public class Platform : MonoBehaviour
@@ -7,6 +6,11 @@ public class Platform : MonoBehaviour
     [SerializeField] private GameObject platform;
     [SerializeField] private Transform posA;
     [SerializeField] private Transform posB;
+    [Header ("collision")]
+    [SerializeField] private Transform PosDanger;
+    [SerializeField] private LayerMask playerLayer;
+    private float damageCooldown = 1f;
+    private float timer;
 
     private Vector3 target;
 
@@ -30,6 +34,12 @@ public class Platform : MonoBehaviour
                 target = posA.position;
             }
         }
+
+        if (DamagePlayer() && Time.time >= timer + damageCooldown)
+        {
+            Health.instance.TakeDamage(5);
+            timer = Time.time;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -46,5 +56,17 @@ public class Platform : MonoBehaviour
         {
             collision.transform.SetParent(null);
         }
+    }
+
+    private bool DamagePlayer()
+    {
+        RaycastHit2D raycast = Physics2D.Raycast(PosDanger.position, Vector2.down, 0.1f, playerLayer);
+        return raycast.collider != null;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(PosDanger.position, PosDanger.position + Vector3.down * 0.1f);
     }
 }

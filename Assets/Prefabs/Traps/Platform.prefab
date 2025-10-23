@@ -12,8 +12,7 @@ GameObject:
   - component: {fileID: 7251744686243587102}
   - component: {fileID: 8303380712218017933}
   - component: {fileID: 4914026627762666850}
-  - component: {fileID: 236515542923312366}
-  - component: {fileID: 4765675270737481955}
+  - component: {fileID: 3102746494672219261}
   m_Layer: 3
   m_Name: Sprite
   m_TagString: Untagged
@@ -160,23 +159,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2, y: 0.31366992}
   m_EdgeRadius: 0
---- !u!114 &236515542923312366
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2976873483138843005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73771783dfac7ca47a4fa4c1bd9d031f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PosDanger: {fileID: 6630154233558230414}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
---- !u!114 &4765675270737481955
+--- !u!114 &3102746494672219261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,10 +171,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30bdc35150010a4f914a80b52da9789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 3
   platform: {fileID: 2976873483138843005}
   posA: {fileID: 3461774078380524724}
   posB: {fileID: 5531605857009920112}
+  PosDanger: {fileID: 6630154233558230414}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &4310394254429151731
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +266,7 @@ Transform:
   m_GameObject: {fileID: 4525442442128917191}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.79, y: 0.8, z: -0.04905223}
+  m_LocalPosition: {x: 3.2562222, y: -0.03757581, z: -0.04905223}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
