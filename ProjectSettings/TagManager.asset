@@ -11,6 +11,7 @@ TagManager:
   - Strawberry
   - Melon
   - FireTrap
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Wall
   - Player
   - Fruits
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -59,6 +60,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3618394019
+    locked: 0
+  - name: Enemies
+    uniqueID: 3250077863
     locked: 0
   - name: HpBar
     uniqueID: 3966642501

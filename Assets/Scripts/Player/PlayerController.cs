@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpPower;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
-    [SerializeField] private BoxCollider2D boxCollider2D;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Vector2 wallJumpForce;
 
     private Rigidbody2D rb;
     private float horizontalInput;
@@ -21,12 +23,12 @@ public class PlayerController : MonoBehaviour
     private float defaultSpeed;
     private float defaultJump;
 
+    // Wall Jumping
     private bool isWallSliding;
-    private float wallSlidingSpeed = 0.5f;
     private bool isWallJumping;
-    private float wallJumpingTime = 0.2f;
-    private float wallJumpingCounter;
-    private float wallJumpingDuration = 0.4f;
+    private float wallJumpingDuration = 0.1f;
+    private bool isSliding;
+
 
     #region MonoBehaviour Lifecycle Methods
     void Awake()
@@ -46,7 +48,51 @@ public class PlayerController : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         Movement();
-        
+        Jump();
+        WallJump();
+
+        anim.SetBool("onWall", isWallSliding);
+        anim.SetBool("fall", fall);
+        anim.SetFloat("run01", isRunning);
+        anim.SetBool("grounded", IsGrounded());
+        anim.SetBool("onWall", isSliding);
+    }
+
+    void FixedUpdate()
+    {
+        if (jumpPressed)
+        {
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            anim.SetTrigger("jump");
+            jumpPressed = false;
+        }
+        if (isWallJumping)
+        {
+            rb.linearVelocity = new Vector2(-horizontalInput * wallJumpForce.x, wallJumpForce.y);
+        }
+    }
+    #endregion
+
+
+    #region Movement
+    private void Movement()
+    {
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+
+        isRunning = Mathf.Abs(horizontalInput);
+
+        if (horizontalInput > 0.01f)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else if (horizontalInput < -0.01f)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+    }
+
+    private void Jump()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             jumpPressed = true;
@@ -72,89 +118,19 @@ public class PlayerController : MonoBehaviour
         {
             fall = false;
         }
-
-        WallSlide();
-        WallJump();
-
-        anim.SetBool("onWall", isWallSliding);
-        anim.SetBool("fall", fall);
-        anim.SetFloat("run01", isRunning);
-        anim.SetBool("grounded", IsGrounded());
-    }
-
-    void FixedUpdate()
-    {
-        if (jumpPressed)
-        {
-            Jump();
-            jumpPressed = false;
-        }
-        if (!isWallJumping)
-        {
-            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-        }
-    }
-    #endregion
-
-
-    #region Movement
-    private void Movement()
-    {
-        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-
-        isRunning = Mathf.Abs(horizontalInput);
-
-        if (horizontalInput > 0.01f)
-        {
-            transform.localScale = Vector3.one;
-        }
-        else if (horizontalInput < -0.01f)
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
-    }
-
-    private void Jump()
-    {
-        rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        anim.SetTrigger("jump");
-    }
-
-    private void WallSlide()
-    {
-        if (IsWalled() && !IsGrounded())
-        {
-            isWallSliding = true;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -wallSlidingSpeed, float.MaxValue));
-        }
-        else
-        {
-            isWallSliding = false;
-        }
     }
 
     private void WallJump()
     {
-        if (isWallSliding)
+        isSliding = (IsWalled() && !IsGrounded() && horizontalInput != 0) ? true : false;
+        if (isSliding)
         {
-            isWallJumping = false;
-            wallJumpingCounter = wallJumpingTime;
-
-            CancelInvoke(nameof(StopWallJumping));
-        }
-        else
-        {
-            wallJumpingCounter -= Time.deltaTime;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && wallJumpingCounter > 0f)
-        {
-            isWallJumping = true;
-            rb.linearVelocity = new Vector2(0, 0);
-            rb.AddForce(new Vector2(rb.linearVelocity.x, jumpPower * 1.5f), ForceMode2D.Impulse);
-            wallJumpingCounter = 0f;
-
-            Invoke(nameof(StopWallJumping), wallJumpingDuration);
+            rb.linearVelocity = new Vector2(horizontalInput, -1f);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isWallJumping = true;
+                Invoke(nameof(StopWallJumping), wallJumpingDuration);
+            }
         }
     }
     
@@ -165,20 +141,21 @@ public class PlayerController : MonoBehaviour
 
     private bool IsWalled()
     {
-        RaycastHit2D raycast = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
+        RaycastHit2D raycast = Physics2D.Raycast(wallCheck.position, new Vector2(horizontalInput, 0), 0.05f, wallLayer);
         return raycast.collider != null;
     }
 
     private bool IsGrounded()
     {
-        RaycastHit2D raycast = Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size, 0, Vector2.down, 0.05f, groundLayer);
+        RaycastHit2D raycast = Physics2D.Raycast(groundCheck.position, Vector2.down, 0.05f, groundLayer);
         return raycast.collider != null;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxCollider2D.bounds.center, boxCollider2D.bounds.size);
+        Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * 0.05f);
+        Gizmos.DrawLine(wallCheck.position, wallCheck.position + new Vector3(horizontalInput, 0, 0) * 0.05f);
     }
     #endregion
 

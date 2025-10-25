@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
+    // void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Enemy"))
+    //     {
+    //         Health.instance.TakeDamage(5);
+    //     }
+    // }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Trap"))
