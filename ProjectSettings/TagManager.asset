@@ -52,8 +52,14 @@ TagManager:
   - name: Background
     uniqueID: 667565345
     locked: 0
+  - name: Foreground
+    uniqueID: 785814203
+    locked: 0
   - name: Wall
     uniqueID: 2887872199
+    locked: 0
+  - name: Traps
+    uniqueID: 723052897
     locked: 0
   - name: Ground
     uniqueID: 1818337599

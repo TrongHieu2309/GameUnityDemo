@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300e5b09dd8837545a751cab0b97cf41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 7
   posA: {fileID: 2218214853453622645}
   posB: {fileID: 7985815320579226259}
 --- !u!1 &5989375493492124599
