@@ -37,9 +37,24 @@ public class Health : MonoBehaviour
         if (!isDamage) return;
 
         currentHealth = Mathf.Clamp(currentHealth - damage, 0f, maxHealth);
-        anim.SetTrigger("hurt");
+        if (currentHealth > 0)
+        {
+            anim.SetTrigger("hurt");
+        }
+        else
+        {
+            if (GameManager.instance.HasRespawnPoint() && GameManager.instance != null)
+            {
+                GameManager.instance.Respawn();
+                currentHealth = maxHealth;
+            }
+            else
+            {
+                Debug.Log("Game Over");
+                Time.timeScale = 0f;
+            }
+        }
         UpdateHpBar();
-
         StartCoroutine(Hurt());
     }
 

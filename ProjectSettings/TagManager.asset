@@ -12,6 +12,7 @@ TagManager:
   - Melon
   - FireTrap
   - Enemy
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
@@ -63,6 +64,9 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 1818337599
+    locked: 0
+  - name: Item
+    uniqueID: 4154186399
     locked: 0
   - name: Player
     uniqueID: 3618394019
