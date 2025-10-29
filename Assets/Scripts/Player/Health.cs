@@ -105,6 +105,7 @@ public class Health : MonoBehaviour
         {
             maxHealth += 10f;
             currentHealth = maxHealth;
+            hpBar.color = Color.magenta;
             UpdateHpBar();
         }
     }

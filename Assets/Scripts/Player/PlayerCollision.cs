@@ -2,8 +2,25 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
+    private GameManager gameManager;
+    void Awake()
+    {
+        gameManager = FindAnyObjectByType<GameManager>();
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("SpikedBall"))
+        {
+            Health.instance.TakeDamage(20);
+        }
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("Cup"))
+        {
+            Debug.Log("You Win!");
+        }
+
         if (collision.CompareTag("Trap"))
         {
             Health.instance.TakeDamage(5);
@@ -57,6 +74,16 @@ public class PlayerCollider : MonoBehaviour
                 fruits.TakeFruits();
                 Health.instance.StandardHealing(5);
             }
+        }
+
+        if (collision.CompareTag("Fruits"))
+        {
+            FruitsController fruits = collision.GetComponent<FruitsController>();
+            if (fruits != null)
+            {
+                fruits.TakeFruits();
+            }
+            gameManager.AddScore(1);
         }
 
         if (collision.CompareTag("Checkpoint"))

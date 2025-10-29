@@ -8,7 +8,8 @@ public class SpikedBall : MonoBehaviour
     private CircleCollider2D circleCollider2D;
     private Rigidbody2D rb;
     private bool attacking;
-    private float range = 50f;
+    private float range = 5f;
+    private Vector3 initialPosition;
 
     void Awake()
     {
@@ -19,6 +20,7 @@ public class SpikedBall : MonoBehaviour
     void Start()
     {
         Stop();
+        initialPosition = transform.position;
     }
 
     void Update()
@@ -35,7 +37,7 @@ public class SpikedBall : MonoBehaviour
         transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         if (IsGrounded())
         {
-            moveSpeed += 0.3f * Time.deltaTime;
+            moveSpeed += 0.85f * Time.deltaTime;
             rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
         }
     }
@@ -58,9 +60,25 @@ public class SpikedBall : MonoBehaviour
         return raycast.collider != null;
     }
 
-    private void Stop()
+    public void Stop()
     {
         rb.gravityScale = 0;
         attacking = false;
+        moveSpeed = 5.5f;
+        rotationSpeed = -2f;
+        rb.linearVelocity = new Vector2(0, 0);
+    }
+
+    public void ResetToInitial()
+    {
+        rb.gravityScale = 0;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        transform.position = initialPosition;
+        transform.rotation = Quaternion.identity;
+
+        attacking = false;
+        moveSpeed = 5.5f;
     }
 }

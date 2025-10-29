@@ -13,6 +13,9 @@ TagManager:
   - FireTrap
   - Enemy
   - Checkpoint
+  - SpikedBall
+  - Cup
+  - Fruits
   layers:
   - Default
   - TransparentFX
@@ -76,6 +79,9 @@ TagManager:
     locked: 0
   - name: HpBar
     uniqueID: 3966642501
+    locked: 0
+  - name: UI
+    uniqueID: 3231467691
     locked: 0
   m_RenderingLayers:
   - Default

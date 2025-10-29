@@ -18,14 +18,6 @@ public class Trampoline : MonoBehaviour
         boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
-    void Update()
-    {
-        if (OnTrampoline())
-        {
-            anim.SetTrigger("activate");
-        }
-    }
-
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -34,15 +26,18 @@ public class Trampoline : MonoBehaviour
         }
     }
 
-    public void BounceEvent()
+    void Update()
     {
-        if (playerRb != null && OnTrampoline())
+        if (OnTrampoline())
         {
-            Animator playerAnim = playerRb.GetComponent<Animator>();
-            playerRb.linearVelocity = Vector2.zero;
-            playerRb.AddForce(Vector2.up * bouncePower, ForceMode2D.Impulse);
-            if (playerAnim != null)
+            anim.SetTrigger("activate");
+
+            if (playerRb != null)
             {
+                playerRb.linearVelocity = Vector2.zero;
+                playerRb.AddForce(Vector2.up * bouncePower, ForceMode2D.Impulse);
+
+                Animator playerAnim = playerRb.GetComponent<Animator>();
                 playerAnim.SetTrigger("jump");
             }
         }

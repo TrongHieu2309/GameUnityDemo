@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5865933246756477744}
   - component: {fileID: 1693629212800670423}
   - component: {fileID: 6081443857692703248}
-  - component: {fileID: 3100685538658929988}
+  - component: {fileID: 1572126657305059318}
   m_Layer: 8
   m_Name: Bananas
-  m_TagString: Bananas
+  m_TagString: Fruits
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,8 +76,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -140780897
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -5728686177044832811, guid: b1f24b3bc2e2f1d4b858657ad5c115a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -148,7 +148,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.046717823}
   m_Radius: 0.27735192
---- !u!114 &3100685538658929988
+--- !u!114 &1572126657305059318
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
