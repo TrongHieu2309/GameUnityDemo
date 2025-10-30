@@ -83,7 +83,6 @@ public class PlayerCollider : MonoBehaviour
             {
                 fruits.TakeFruits();
             }
-            gameManager.AddScore(1);
         }
 
         if (collision.CompareTag("Checkpoint"))

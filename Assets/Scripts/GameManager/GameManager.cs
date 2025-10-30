@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip checkPointSound;
     [SerializeField] private AudioClip respawnSound;
     
-    public static GameManager instance;
+    public static GameManager instance { get; private set; }
     private Transform respawnPoint = null;
     private List<GameObject> activatedCheckpoints = new List<GameObject>();
     private PlayerController playerController;

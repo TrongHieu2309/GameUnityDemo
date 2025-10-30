@@ -20,4 +20,9 @@ public class FruitsController : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    public void AddScore()
+    {
+        GameManager.instance.AddScore(1);
+    }
 }
