@@ -157,14 +157,14 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        RaycastHit2D raycast = Physics2D.Raycast(groundCheck.position, Vector2.down, 0.05f, groundLayer);
+        RaycastHit2D raycast = Physics2D.Raycast(groundCheck.position, Vector2.down, 0.14f, groundLayer);
         return raycast.collider != null;
     }
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * 0.05f);
+        Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * 0.14f);
         Gizmos.DrawLine(wallCheck.position, wallCheck.position + new Vector3(horizontalInput, 0, 0) * 0.05f);
     }
     #endregion
