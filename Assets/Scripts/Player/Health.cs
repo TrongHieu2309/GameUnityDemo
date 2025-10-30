@@ -5,18 +5,23 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-    public static Health instance;
+    public static Health instance { get; private set; }
 
     [Header("Health")]
     [SerializeField] private float maxHealth;
     [SerializeField] private Image hpBar;
     [SerializeField] private float currentHealth;
 
+    [Header("Sound")]
+    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] private AudioClip gameOverSound;
+
     private Animator anim;
     private float defaultMaxHealth;
     private bool isDamage = true;
     private float hurtCooldown = 2;
     private SpriteRenderer spriteRenderer;
+    public bool isDead;
 
     void Awake()
     {
@@ -39,23 +44,36 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damage, 0f, maxHealth);
         if (currentHealth > 0)
         {
+            SoundManager.instance.PlaySound(hurtSound);
             anim.SetTrigger("hurt");
         }
         else
         {
-            if (GameManager.instance.HasRespawnPoint() && GameManager.instance != null)
-            {
-                GameManager.instance.Respawn();
-                currentHealth = maxHealth;
-            }
-            else
-            {
-                Debug.Log("Game Over");
-                Time.timeScale = 0f;
-            }
+            isDead = true;
+            SoundManager.instance.PlaySound(hurtSound);
+            anim.SetTrigger("die");
+            StartCoroutine(Dead());
         }
         UpdateHpBar();
         StartCoroutine(Hurt());
+    }
+
+    private IEnumerator Dead()
+    {
+        if (GameManager.instance.HasRespawnPoint() && GameManager.instance != null)
+        {
+            yield return new WaitForSeconds(1f);
+            GameManager.instance.Respawn();
+            currentHealth = maxHealth;
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+            UIManager.instance.GameOver();
+            SoundManager.instance.PlaySound(gameOverSound);
+            Time.timeScale = 0f;
+        }
+        UpdateHpBar();
     }
 
     private IEnumerator Hurt()

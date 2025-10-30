@@ -6,12 +6,15 @@ using Unity.VisualScripting;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private AudioClip checkPointSound;
+    [SerializeField] private AudioClip respawnSound;
     
     public static GameManager instance;
     private Transform respawnPoint = null;
     private List<GameObject> activatedCheckpoints = new List<GameObject>();
     private PlayerController playerController;
     private float score = 0;
+    public bool isRespawn;
 
     void Awake()
     {
@@ -31,6 +34,12 @@ public class GameManager : MonoBehaviour
 
     public void SetRespawnPoint(Transform newRespawnPoint)
     {
+        if (!activatedCheckpoints.Contains(newRespawnPoint.gameObject))
+        {
+            SoundManager.instance.PlaySound(checkPointSound);
+            activatedCheckpoints.Add(newRespawnPoint.gameObject);
+        }
+
         respawnPoint = newRespawnPoint;
 
         foreach (var checkpoint in activatedCheckpoints)
@@ -40,15 +49,15 @@ public class GameManager : MonoBehaviour
                 Destroy(checkpoint);
             }
         }
-
-        activatedCheckpoints.Clear();
-        activatedCheckpoints.Add(newRespawnPoint.gameObject);
     }
 
     public void Respawn()
     {
         if (respawnPoint != null)
         {
+            isRespawn = true;
+            Health.instance.isDead = false;
+            SoundManager.instance.PlaySound(respawnSound);
             SpikedBall spikedBall = FindAnyObjectByType<SpikedBall>();
             if (spikedBall != null)
             {

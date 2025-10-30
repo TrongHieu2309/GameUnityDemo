@@ -1,7 +1,7 @@
 using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
-    public static PlayerController instance;
+    public static PlayerController instance { get; private set; }
 
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform wallCheck;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Vector2 wallJumpForce;
+
+    [Header("Sound")]
+    [SerializeField] private AudioClip jumpSound;
 
     private Rigidbody2D rb;
     private float horizontalInput;
@@ -45,6 +48,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (UIManager.instance.isPause == true || Health.instance.isDead == true || UIManager.instance.isWinning == true)
+        {
+            rb.linearVelocity = new Vector2(0, 0);
+        }
+
         horizontalInput = Input.GetAxis("Horizontal");
         Movement();
         Jump();
@@ -96,7 +104,8 @@ public class PlayerController : MonoBehaviour
         {
             jumpPressed = true;
             jumpCount = 0;
-            
+            SoundManager.instance.PlaySound(jumpSound);
+
         }
         if (Input.GetKeyUp(KeyCode.Space) && rb.linearVelocity.y > 0)
         {
@@ -104,6 +113,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space) && !IsGrounded() && jumpCount == 0)
         {
+            SoundManager.instance.PlaySound(jumpSound);
             rb.linearVelocity = new Vector2(horizontalInput, jumpPower);
             jumpCount++;
             anim.SetTrigger("doubleJump");
@@ -127,12 +137,13 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(horizontalInput, -1f);
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                SoundManager.instance.PlaySound(jumpSound);
                 isWallJumping = true;
                 Invoke(nameof(StopWallJumping), wallJumpingDuration);
             }
         }
     }
-    
+
     private void StopWallJumping()
     {
         isWallJumping = false;
@@ -178,4 +189,9 @@ public class PlayerController : MonoBehaviour
         }
     }
     #endregion
+
+    public void PlayingGame()
+    {
+        Time.timeScale = 1f;
+    }
 }

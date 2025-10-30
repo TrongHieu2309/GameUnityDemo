@@ -18,7 +18,7 @@ public class PlayerCollider : MonoBehaviour
     {
         if (collision.CompareTag("Cup"))
         {
-            Debug.Log("You Win!");
+            UIManager.instance.WinGame();
         }
 
         if (collision.CompareTag("Trap"))
@@ -88,12 +88,21 @@ public class PlayerCollider : MonoBehaviour
 
         if (collision.CompareTag("Checkpoint"))
         {
+            GameManager.instance.isRespawn = false;
             Animator anim = collision.GetComponent<Animator>();
             if (anim != null)
             {
                 anim.SetTrigger("appear");
             }
             GameManager.instance.SetRespawnPoint(collision.transform);
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Checkpoint"))
+        {
+            GameManager.instance.isRespawn = false;
         }
     }
 }

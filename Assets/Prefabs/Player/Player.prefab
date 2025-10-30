@@ -225,6 +225,8 @@ MonoBehaviour:
   wallCheck: {fileID: 5824004356376196288}
   groundCheck: {fileID: 3930052300868332763}
   wallJumpForce: {x: 12, y: 20}
+  jumpSound: {fileID: 8300000, guid: 6561e43a388387e4ab15a57b00200fc0, type: 3}
+  wallJumpSound: {fileID: 8300000, guid: 6561e43a388387e4ab15a57b00200fc0, type: 3}
 --- !u!114 &5217803012757090681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e44be49a30d5b4a8a372f04e73f161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
+  maxHealth: 15
   hpBar: {fileID: 0}
   currentHealth: 0
 --- !u!1 &7281893449309701044
